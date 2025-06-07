@@ -1,0 +1,5 @@
+*.sqlite3
+*.key
+__pycache__/
+venv/
+.venv/

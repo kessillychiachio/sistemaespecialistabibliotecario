@@ -1,0 +1,20 @@
+{
+    "conversas": [
+        {
+            "mensagens": [ "oi", "olá", "tudo bem?", "oi, tudo bem?" ],
+            "resposta": "Olá, sou o robô bibliotecário, Akehnaton. Posso responder perguntas sobre a biblioteca e te ajudar a encontrar artigos. Digite 'quero pesquisar artigos' ou pressione o botão 🔍 para procurar por artigos por palavras-chave ou 🧠 por áreas de conhecimento"
+        },
+        {
+            "mensagens": [ "bom dia" ],
+            "resposta": "Bom dia, sou o robô bibliotecário, Akehnaton. Posso responder perguntas sobre a biblioteca e te ajudar a encontrar artigos. Digite 'quero pesquisar artigos' ou pressione os botões 🔍 para procurar por artigos por palavras-chave ou 🧠 por áreas de conhecimento"
+        },
+        {
+            "mensagens": [ "boa tarde" ],
+            "resposta": "Boa tarde, sou o robô bibliotecário, Akehnaton. Posso responder perguntas sobre a biblioteca e te ajudar a encontrar artigos. Digite 'quero pesquisar artigos' ou pressione os botões 🔍 para procurar por artigos por palavras-chave ou 🧠 por áreas de conhecimento"
+        },
+        {
+            "mensagens": [ "boa noite" ],
+            "resposta": "Boa noite, sou o robô bibliotecário, Akehnaton. Posso responder perguntas e te ajudar a encontrar artigos. Digite 'quero pesquisar artigos' ou pressione os botões 🔍 para procurar por artigos por palavras-chave ou 🧠 por áreas de conhecimento"
+        }               
+    ]
+}

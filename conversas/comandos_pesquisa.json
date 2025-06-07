@@ -1,0 +1,12 @@
+{
+    "conversas": [
+        {
+            "mensagens": [ "quero pesquisar artigos", "quero pesquisar um artigo", "quero pesquisar por um artigo", "quero um artigo", "preciso de um artigo" ],
+            "resposta": "Informe as palavras-chave que deseja pesquisar, separe-as usando uma vírgula"
+        },
+        {
+            "mensagens": [ "pesquisar de novo", "preciso de outro artigo", "quero mais artigos" ],
+            "resposta": "Informe as palavras-chave que deseja pesquisar, separe-as usando uma vírgula"
+        }
+    ]
+}

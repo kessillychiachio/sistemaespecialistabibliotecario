@@ -1,0 +1,349 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% How to use writeLaTeX: 
+%
+% You edit the source code here on the left, and the preview on the
+% right shows you the result within a few seconds.
+%
+% Bookmark this page and share the URL with your co-authors. They can
+% edit at the same time!
+%
+% You can upload figures, bibliographies, custom classes and
+% styles using the files menu.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{article}
+
+\usepackage{sbc-template}
+
+\usepackage{graphicx,url}
+
+\usepackage[brazil]{babel}   
+\usepackage[utf8]{inputenc}  
+
+     
+\sloppy
+
+\title{Uma Solução Modularizada e Plugável para Indexação de Informações sobre Trabalhos Acadêmicos escritos em Latex}
+
+\author{Daniel do Espirito Santo Correia, Luis Paulo da Silva Carvalho}%marcador_fim_author
+
+\address{Instituto Federal de Educação, Ciência e Tecnologia da Bahia (IFBA)\\
+  Campus Vitória da Conquista
+  \email{danncorreia95@hotmail.com, luispscarvalho@gmail.com}
+}
+
+\begin{document} 
+
+\maketitle
+
+\begin{abstract}
+\textbf{Context:} This work presents the development of a modular and pluggable solution for indexing information on academic papers written in LaTeX. \textbf{Goals:} The main objective of this work was to create a web system, called InProLa (Indexing and Processing of LaTeX), using a pluggable architecture capable of processing and indexing scientific papers written in LaTeX, as well as making these papers available so they can be searched by their content. \textbf{Method:} A General/Generic Architecture was defined to support the addition of functional and independent \textit{plugins}. The architecture was instantiated as a Web Application, InProLa, using the JavaScript programming language and modern frameworks. To test InProLa, recent undergraduate thesis papers, written in article format, from the Bachelor's Degree in Information Systems at IFBA, Vitória da Conquista campus, were used. \textbf{Results:} InProLa was successfully developed, and its source code is publicly available, allowing for its evolution through the addition of \textit{plugins} and reuse in the creation of other software solutions that can benefit from plugin-oriented architecture. \textbf{Conclusion:} The resulting Web Application, InProLa, provides evidence that it is possible to use a plugin-oriented Software Architecture to process and make available information obtained from LaTeX documents.
+
+\end{abstract}
+
+\begin{resumo} 
+\textbf{Contexto:} Este trabalho apresenta o desenvolvimento de uma solução modularizada e plugável para indexação de informações sobre trabalhos acadêmicos escritos em LaTeX. \textbf{Objetivo:} O principal objetivo deste trabalho foi criar um sistema web, chamado InProLa (Indexação e Processamento de Latex), utilizando uma arquitetura plugável, capaz de processar e indexar trabalhos científicos escritos em LaTex, bem como disponibilizar tais trabalhos de forma que possam ser pesquisados pelos seus conteúdos. \textbf{Método:} Foi definida uma Arquitetural Geral/Genérica para dar suporte à adição de \textit{plugins} funcionais e independentes. A partir daí a Arquitetura foi instanciada na forma de uma Aplicação Web, a InProla, utilizando linguagem de programação, Javacript, e frameworks modernos. Para testar o InProLa, foram utilizados trabalhos de conclusão de curso recentes, escritos na forma de artigos, do Bacharelado em Sistemas de Informação do IFBA, campus Vitória da Conquista. \textbf{Resultados:} O InProLa foi desenvolvido com sucesso e o seu código-fonte se encontra disponbilizado para acesso público, possibilitando sua evolução através da adição de \textit{plugins} e reuso durante a criação de outras soluções de software que possam se beneficiar da sua arquitetura. \textbf{Conclusões:} A Aplicação Web resultante, inProLa, fornece indícios de que é possível utilizar uma Arquitetura de Software orientada a \textit{plugins} para realizar o processamento e disponbilização de informações obtidas a partir de documentos Latex.
+\end{resumo}
+
+\section{Introdução}
+
+O Tex foi desenvolvido no final dos anos 70 com o intuito de criar textos com melhor qualidade na representação gráfica, porém era considerado muito técnico pelos seus usuários e exigia um maior conhecimento da plataforma para ser utilizada. Por volta da década de 80, o LaTeX foi criado por Leslie Lamport \cite{alonso2019}. A sua criação teve como objetivo adicionar mais comandos ao Tex, permitindo que os seus usuários conseguissem produzir trabalhos com alta qualidade tipográfica e um layout profissional.
+
+O funcionamento do LaTeX foi baseado em um conjunto de macros, nas quais se adicionam informações e definem-se instruções de formatação das mesmas. Ele não é um processador de palavras. Ao invés disso, ele encoraja os autores a não se preocuparem com a aparência ao escrever, mas a se concentrarem em criar o conteúdo correto \cite{theLatexProject}.
+
+Sendo o LaTeX muito utilizado para a elaboração de documentos técnicos e científicos e por trazer facilidades de formatação e padronização, a \textit{startup} Overleaf, fundada em 2012, desenvolveu uma plataforma parcialmente gratuita onde usuários conseguem escrever um documento e pré-visualizá-lo,  além de permitir  compartilhá-lo com outras pessoas para que possam realizar suas contribuições. Segundo a desenvolvedora \cite{overleaf2012}, a plataforma possui, hoje, quinze milhões de usuários ao redor do mundo, entre eles pesquisadores, estudantes e professores. Isto evidencia que um grande volume de informações se encontra atualmente mantido em documentos LaTeX e que ter acesso indexado a tais informações pode ser vantajoso. Dessa forma, este projeto de pesquisa idealiza e desenvolve uma plataforma online para que os docentes e discentes possam ter acesso a esse conteúdo de forma prática.
+
+Segundo \cite{cosentino2023}, arquitetura plugável ou \textit{plugin architecture} é uma das muitas soluções que visam trabalhar com modularidade, permitindo que extensões sejam integradas a sistemas sem a necessidade de alterações na estrutura e no código. Essa estrutura pode ser dividida em 3 partes: a aplicação provedora ou \textit{host application}, a interface de \textit{plugins} ou \textit{plugin interface} e os \textit{plugins}.
+
+Para este trabalho foi utilizada uma arquitetura plugável, pois ela irá permitir a evolução dos diferentes processamentos sobre os textos LaTeX. Sobre a arquitetura, foi desenvolvido um sistema web, chamado InProLa (Indexação e Processamento de LaTeX), capaz de processar e indexar trabalhos científicos escritos em LaTeX, bem como disponibilizar tais trabalhos de forma que possam ser pesquisados pelos seus conteúdos.
+
+\subsection{Justificativa}
+Com a contínua adesão atual de alguns professores orientadores na qual os trabalhos de conclusão do curso de Bacharelado em Sistemas de Informação do IFBA, campus Vitória da Conquista estarem sendo escritos em LaTeX, e por ainda não haver um local onde se concentraria a indexação das informações destes documentos de forma digital, este projeto de pesquisa idealiza e desenvolve uma plataforma online para que os docentes e discentes possam ter acesso a esse conteúdo de forma prática e rápida.
+
+\subsection{Problema}
+
+Após uma breve pesquisa, não foi possível encontrar soluções escaláveis que consigam realizar a indexação e processamento específico de trabalhos escritos em LaTex, tal qual este projeto visa fazer. Sobre isso, também não foram encontradas referências específicas  a esforços similares que buscaram organizar a arquitetura deste tipo de software de forma plugável. 
+Julgamos que a arquitetura plugável é necessária para que, ao longo da vida útil do software, novos módulos de processamento de textos LaTex sejam adicionados para disponibilizar novas informações ou visões sobre trabalhos acadêmicos de forma automatizada.
+
+\subsection{Objetivos}
+
+\subsubsection{Geral}
+O principal objetivo deste trabalho é \textbf{criar um sistema web, chamado InProLa (Indexação e Processamento de Latex), utilizando uma arquitetura plugável, capaz de processar e indexar trabalhos científicos escritos em LaTex, bem como disponibilizar tais trabalhos de forma que possam ser pesquisados pelos seus conteúdos.}
+
+\subsubsection{Específicos}
+
+Associados ao objetivo geral, são identificados os específicos abaixo:
+
+\begin{itemize}
+    \item Planejar e desenvolver uma arquitetura orientada a plugins que possibilite o gerenciamento destes com o mínimo de interrupções na execução do sistema;
+    \item Criar uma aplicação web, chamada InProLa, utilizando a arquitetura plugável;
+    \item Documentar o método através do qual  os plugins devem ser  desenvolvidos e integrados à aplicação web;
+    \item Criar plugins para demonstrar o uso do método e da aplicação web.
+\end{itemize}
+
+\section{Metodologia}
+
+\subsection{Classificação da pesquisa}
+
+Esta é uma pesquisa aplicada predominantemente quantitativa, e foi utilizado o conhecimento da pesquisa aplicada para resolver essa demanda. Observa-se que ela é experimental. Também se fez necessário utilizar pesquisa de laboratório, pois todos os dados utilizados serão controlados pelo pesquisador e pelo professor orientador. Com isso, a fonte de informação foi provida por uma pesquisa documental.
+
+\subsection{Procedimentos Metodológicos}
+
+Foram seguidos os passos descritos na Figura \ref{fig:fluxograma}. Tais atividades são explicadas de forma mais detalhada nas subseções seguintes.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=1.0\textwidth]{images/fluxograma_dos_passos.png}
+\caption{Fluxograma dos passos seguidos.}
+\label{fig:fluxograma}
+\end{figure}
+
+\subsubsection{Definir a estrutura da aplicação em geral}
+
+Este passo, destacado na Figura \ref{fig:fluxograma} pela atividade 1, teve como objetivo definir os padrões de projeto e de arquitetura a serem utilizados no desenvolvimento do sistema, visando garantir um melhor ambiente para manutenção e escalabilidade. 
+
+\subsubsection{Desenvolver o back-end}
+
+Com a atividade 2, o objetivo se concentrou em ter um módulo responsável por sustentar o funcionamento dos plugins e seus processamentos, manter as regras de negócio, controlar usuários e acessar o banco de dados.
+
+\subsubsection{Desenvolver o primeiro plugin de processamento}
+
+Após desenvolver o back-end demos início à atividade 3, pois, para testar a funcionalidade de gerenciamento de plugins, era necessário que existisse ao menos um deles em mãos. Ele também foi utilizado como modelo para os próximos.
+
+\subsubsection{Desenvolver o front-end}
+
+É necessário ter um local que os usuários consigam acessar as funcionalidades do sistema. Para isso, a atividade 4 foi utilizada para desenvolver uma aplicação front-end responsável por toda a parte visual e interativa.
+
+\subsubsection{Avaliar a solução final}
+
+A atividade 5 resumiu-se em avaliar a implementação do InProLa utilizando os arquivos de TCCs que foram escritos em LaTeX e apresentados no curso, Bacharelado em Sistemas de Informação do IFBA, campus Vitória da Conquista, até o momento. Após isso, foram realizadas pesquisas sobre a base indexada, esperando que o sistema retornasse os dados selecionados.
+
+\subsubsection{Finalização do artigo}
+
+Por fim, na última etapa, foi realizada a atividade 5.1 de forma que os conhecimentos e contribuições deste trabalho fossem documentados durante a escrita deste artigo.
+
+\section{Fundamentos Teóricos e Técnicos}
+
+\subsection{Arquitetura Orientada a Plugins}
+
+Observando a Figura \ref{fig:arquitetura_plugavel} é possível compreender como explica os componentes de uma arquitetura baseada em plugins funciona \cite{gorbonosov2013plug}\cite{cosentino2023}:
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=1.0\textwidth]{images/arquitetura_plugavel.png}
+\caption{Uma arquitetura plugável}
+\label{fig:arquitetura_plugavel}
+\end{figure}
+
+\begin{itemize}
+    \item A aplicação provedora ou \textit{host application} é a responsável por fornecer os ambientes de utilização do usuário final;
+    \item A interface de plugins ou \textit{plugin interface} é a responsável por fornecer um padrão de conexão e chamadas a plugins. Esse padrão inclui métodos, propriedades, parâmetros e eventos que os plugins devem possuir ao serem desenvolvidos;
+    \item O plugin é um módulo individual que a \textit{host application} utiliza para executar passos de processamento. Cada plugin pode ser desenvolvido para uma funcionalidade específica, evitando acúmulos de responsabilidades .
+\end{itemize}
+
+\subsection{LATEX}
+
+Segundo \cite{alves2020} LaTeX é uma linguagem de marcação, com uma sintaxe parecida com HTML, voltada para a escrita de trabalhos acadêmicos e documentos. Essa semelhança se dá devido à utilização de tags junto com a escrita do texto. É possível observar algumas dessas tags na Figura \ref{fig:latex_exemplo}: /title, que é utilizada para definir o título, e /author, onde se define o autor.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=1.0\textwidth]{images/exemplo_latex.png}
+\caption{Exemplo de um artigo escrito em Latex antes de ser compilado}
+\label{fig:latex_exemplo}
+\end{figure}
+
+ Ao invés de escrever o trabalho observando sua aparência final, com esta
+ tecnologia, primeiro foca-se na estrutura e na qualidade do texto. Após isso, atribui-se a estilização. O resultado desta combinação de tags e texto pode ser observado na Figura 4.
+
+ \begin{figure}[htb]
+\centering
+\includegraphics[width=1.0\textwidth]{images/exemplo_latex_compilado.png}
+\caption{Trecho do Artigo da figura 3 após ser compilado}
+\label{fig:latex_exemplo_compilado}
+\end{figure}
+
+\subsection{Javascript}
+
+Javascript é uma linguagem de programação web criada pela Netscape em parceria com a Sun Microsystems, com o propósito de adicionar interatividade dentro de uma página web \cite{junior2022}. Ela é constantemente utilizada como base no desenvolvimento de diversos \textit{frameworks}, alguns voltados para a criação de sistemas web, tais como, por exemplo, React.js, Angular, Vue.js, para aplicações mobile, através do React Native e Ionic e para a criação de APIs, como o Node.js.
+
+Como consequência da sua ampla utilização, é possível observar na Figura \ref{fig:linguagens_populares}  que JavaScript é a tecnologia mais popular entre os programadores, resultado de sua diversidade de \textit{frameworks} que pode ser aplicada em diversas etapas do desenvolvimento de softwares.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=1.0\textwidth]{images/grafico_github.png}
+\caption{Linguagens de programação mais populares entre 2014 e 2022 segundo o GitHub \cite{inforchannel2023}}
+\label{fig:linguagens_populares}
+\end{figure}
+
+\section{Desenvolvendo o InProLa}
+
+O InProLa foi pensado para ser uma plataforma que utiliza plugins para realizar os processamentos dos projetos escritos em Latex e para que fosse possível ter um gerenciamento destes plugins, podendo adicionar novos, atualizar os já existentes e remover os desnecessários. Para tanto, na Figura \ref{fig:tecnologias_inprola} é possível observar as tecnologias que utilizamos no desenvolvimento.
+
+Na primeira coluna da Figura \ref{fig:tecnologias_inprola} se encontram as tecnologias utilizadas no \textit{backend}, como javascript, que também foi escolhido como linguagem para o \textit{frontend}.
+
+Para o desenvolvimento do \textit{backend} foi escolhido o node.js, que é um ambiente de execução javascript \cite{nodejs_about}, por ter uma comunidade de suporte relativamente grande e robusta, facilitando a busca e uso de bibliotecas para complementar a arquitetura do projeto e também por ser bastante utilizado atualmente \cite{kinsta2023}. Também foi utilizado o Nest.js \cite{nestjs_docs}, que atuou juntamente com o Node.js, facilitando o gerenciamento dos \textit{plugins}. 
+ 
+Para desenvolver o \textit{frontend}, o \textit{framework} utilizado foi o Angular \cite{angular_overview}. Segundo \cite{angular_transformando_2024} ele foi desenvolvido pelo Google e vem se tornando bastante popular por oferecer uma estruturação baseada em componentes, contribuindo para uma facilidade de manutenção de código.
+
+Para armazenar os dados dos textos LaTeX após serem processados, utilizamos o MongoDB \cite{mongodb_docs}, um banco de dados NoSQL orientado a documentos.
+
+ \begin{figure}[htb]
+\centering
+\includegraphics[width=1.0\textwidth]{images/ilustracao_tecnologias_utilizadas.png}
+\caption{Tecnologias utilizadas no InProLa}
+\label{fig:tecnologias_inprola}
+\end{figure}
+ 
+ Na Figura \ref{fig:pastas_inprola}, se encontra a estrutura de
+ arquivos do \textit{frontend} e do \textit{backend} do InProLa. No backend a pasta src, chamada também de \textit{source}, tem o objetivo de armazenar arquivos de código do projeto. A pasta libs é o local destinado para armazenar os plugins desenvolvidos. A pasta \textit{common} é para onde são destinados os arquivos compartilhados entre o projeto e os \textit{plugins}, tais como classes e funções. Já no \textit{frontend} temos a pasta \textit{common}, que é utilizada para armazenar arquivos utilizados de forma global, como os \textit{interceptors} e \textit{pipes}. As demais pastas (no mesmo nível da \textit{common}) são reservadas para os componentes funcionais do \textit{frontend}. Cada pasta possui um nome relacionado à funcionalidade do seu componente respectivo. Na figura, por exemplo, a pasta \textit{search.component} responde por funcionalidades relacionadas à pesquisa sobre os dados minerados dos textos Latex que foram indexados pelo InProLa.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=1.0\textwidth]{images/ilustracao_organizacao_pastas.png}
+\caption{Estrutura dos projetos \textit{backend} e \textit{frontend}}
+\label{fig:pastas_inprola}
+\end{figure}
+
+É possível observar na Figura \ref{fig:fluxograma_processamento} o fluxo percorrido por um trabalho acadêmico escrito em LaTex ao ser processado pelo InProLa. O trabalho deve ser armazenado no Google Drive do InProLa para que este possa ser processado. É necessário executar um \textit{endpoint} do \textit{backend} para iniciar o processamento dos arquivos LaTex. O primeiro passo do sistema é realizar o download todos os trabalhos armazenados no Google Drive, para que se tenha uma cópia local a ser processada. Com todos os downloads concluídos, cada \textit{plugin} deverá processar os trabalhos, extraindo informações específicas, que são armazenadas no banco de dados.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=1.0\textwidth]{images/diagrama_atividades.png}
+\caption{Fluxo de processamento dos trabalhos escritos em Latex}
+\label{fig:fluxograma_processamento}
+\end{figure}
+
+Observando a Figura \ref{fig:codigo_exemplo_plugin} é possível compreender melhor o funcionamento de um plugin. Ele recebe como parâmetro um objeto chamado PluginProcessPayload, que é composto pelo trabalho acadêmico que irá ser processado e pelo \textit{client} que irá fornecer acesso ao banco de dados. Para um funcionamento correto, obrigatoriamente, são executadas 3 funções ou passos:
+
+\begin{itemize}
+ \item \textit{Process}, entre as linhas 10 e 29, tem como objetivo realizar o processamento do texto do trabalho e armazenar o resultado no banco de dados. No exemplo, o objetivo é extrair o titulo do trabalho, contido na \textit{tag}, \textit{title}. Deve ocorrer neste passo a inserção do título no banco de dados, verificando se já existe um registro dessa informação. Caso exista, o título será atualizado. Caso não exista cria-se um novo registro com a informação;
+ \item \textit{Search}, entre as linhas 31 e 39, é responsável por verificar quais trabalhos armazenados no banco de dados possuem relação com os critérios de busca escolhidos pelo usuário no \textit{frontend}. No exemplo da figura, o plugin apenas verifica se existe algum trabalho que foi processado possuía um texto específico na sua \textit{tag},  \textit{title};
+ \item \textit{filterName}, entre as linhas 41 e 43, é responsável por dar nome ao filtro que é exibido no \textit{frontend}. O frontend consulta esta funcionalidade para exibir o nome de cada plugin para os usuários.
+\end{itemize}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=1.0\textwidth]{images/codigo_plugin_title.png}
+\caption{Código de um exemplo de \textit{plugin}}
+\label{fig:codigo_exemplo_plugin}
+\end{figure}
+
+Ao seguir um arquitetura orientada a plugins, todos os plugins adicionados ao inProLa devem seguir este mesmo perfil de codificação. Isto permite, por exemplo, que o inProLa consiga executar qualquer novo plugin da mesma forma que os anteriores e, portanto, evitar que seja necessário modificar seu código base \cite{cervantes2006using}. 
+
+Durante o desenvolvimento todo o código-fonte do InProLa foi mantido e gerenciado através do Github. Ele se encontra acessível pelo QR Code contido na Tabela \ref{tab:repositorios}.
+
+\begin{table}[ht!]
+\centering
+\caption{Links para acessar os repositórios do InProLa}
+\label{tab:repositorios}
+\begin{tabular}{ |c|c| } 
+ \hline
+ \textbf{Link} & \textbf{QR Code} \\ 
+ \hline
+ Repositório do \textit{backend} \\https://github.com/inProLa/inProLa-server & 
+ \begin{minipage}{.3\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/repositorio back.png}
+ \end{minipage}
+ \\ 
+ \hline
+  Repositório do \textit{frontend} \\https://github.com/inProLa/inProLa-front & 
+ \begin{minipage}{.3\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/repositorio front.png}
+ \end{minipage}
+ \\ 
+ \hline
+\end{tabular}
+\end{table}
+
+Compartilhar o código-fonte é importante para que outras soluções de software possam se basear no inProLa para processar formatos de texto, tais como o Latex, ou reusar sua arquitetura para solucionar outros problemas que possem fazer uso de plugins.
+
+\section{Trabalhos correlatos}
+
+Nesta seção examinamos alguns trabalhos baseados em esforços de mineração de informações a partir de documentos LaTeX.
+
+Um trabalho que tem como objetivo a extração de informações em trabalhos escritos em LaTeX e que utiliza aprendizado de máquina é o de \cite{duan2023latex}, que apresenta o \textit{framework} LaTeX Rainbow. Este \textit{framework} destaca-se por sua capacidade de utilizar o código fonte LaTeX para gerar anotações semânticas detalhadas, preservando a estrutura hierárquica e a ordem de leitura dos documentos. A abordagem melhora a precisão das anotações em comparação com outros datasets tradicionais, ao evitar a perda de informações estruturais importantes durante o processo de extração. Contudo, o LaTeX Rainbow não indexa os projetos e nem os disponibiliza em uma plataforma de busca, se limitando a apenas processar os trabalhos.
+
+O trabalho de \cite{toksoz2024pseudoseer} introduz o PseudoSeer, um motor de busca especializado em recuperar artigos acadêmicos contendo pseudocódigo. Este sistema utiliza o Elasticsearch\footnote{https://www.elastic.co/} para permitir buscas detalhadas através de diversos aspectos de um artigo, como título, resumo e seções de código LaTeX, oferecendo uma funcionalidade avançada de pesquisa por facetas e consultas de correspondência exata. Este projeto se alinha com as inovações introduzidas pelo PseudoSeer ao buscar aprimorar ainda mais a recuperação de informações em documentos acadêmicos, entretanto a arquitetura utilizada para desenvolver o PseudoSeer é estática, se limitando às funcionalidades realizadas no desenvolvimento do projeto. Devido ao InProLa ter sido desenvolvido utilizando arquitetura plugável, é possível desenvolver novas funcionalidades de processamento sem a necessidade de modificações no projeto base.
+
+O EgoMath2 foi um projeto desenvolvido por \cite{10.1007/978-3-642-22673-1_30}, que criaram um motor de busca especializado na recuperação de fórmulas matemáticas em grandes repositórios digitais, como a Wikipedia. O EgoMath2 utiliza fragmentos de LaTeX para identificar e processar notações matemáticas, convertendo-as em representações textuais que podem ser eficientemente indexadas e pesquisadas. Entretanto, ele se limita a apenas buscar fórmulas matemáticas e não cita sobre armazenar e disponibilizar estes trabalhos buscados. O InProLa, por ser orientado a plugins, possibilita desenvolver um recurso parecido com este e também outros para que diferentes processos possam ser executados e disponibilizando os artigos utilizados no processamento.
+
+Após pesquisas, não foi possível encontrar um trabalho com todos os mesmos objetivos deste, de indexar e processar trabalhos em LaTeX. Também, de forma geral, foi identificado que não existem muitos trabalhos relacionados ao processamento de artigos escritos em LaTeX.
+
+\section{Demonstrando o uso do InProLa}
+
+Ao longo do desenvolvimento, para fins de testes, foram utilizados alguns Trabalhos de Conclusão de Curso (TCC) apresentados por discentes do curso de Bacharelado em Sistemas de Informação do IFBA, campus de Vitória da Conquista, durante o ano de 2023. 
+
+Através dos links na Tabela \ref{tab:contribuicoes} é possível visualizar dois vídeos demonstrando usos possíveis do InProLa: processamento de textos Latex e visualização das informações processadas e um endereço que direciona para a aplicação do InProLa que está disponibilizada em nuvem.       
+
+\begin{table}[ht!]
+\centering
+\caption{Links para acessar os vídeos de demonstração.}
+\label{tab:contribuicoes}
+\begin{tabular}{ |c|c| } 
+ \hline
+ \textbf{Link} & \textbf{QR Code} \\ 
+ \hline
+ Vídeo demonstrando o upload de um novo trabalho \\https://encurtador.com.br/GP8ZG & 
+  \begin{minipage}{.3\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/video funcionamento indexação e upload.png}
+ \end{minipage}
+ \\
+ \hline
+ Vídeo demonstrando utilização da plataforma  \\ 
+ https://encurtador.com.br/Zus3x & 
+  \begin{minipage}{.3\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/video funcionamento plataforma.png}
+ \end{minipage}
+ \\ 
+   \hline
+  Endereço da aplicação
+  \\https://inprola-2ba4218bd50b.herokuapp.com & 
+ \begin{minipage}{.3\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/url aplicacao.png}
+ \end{minipage}
+ \\ 
+ \hline
+\end{tabular}
+\end{table}
+
+\section{Conclusões e trabalhos futuros}
+
+Este trabalho teve como objetivo desenvolver um sistema web escalável utilizando uma arquitetura plugável e criado utilizando JavaScript para que discentes e docentes possam ter acesso a artigos/TCCs que foram escritos em LaTeX. Foi possível desenvolver \textit{plugins} para extrair informações do conteúdo e possibilitar a pesquisa pelos trabalhos.
+
+Durante o desenvolvimento do sistema, o maior desafio foi encontrar uma maneira eficiente de gerenciar os \textit{plugins} sem a necessidade de fazer alterações no código base da aplicação e sem precisar reiniciá-la para que novos plugins fossem adicionados. Adotamos o \textit{framework}, Nest.js, e com ele foi possível implementar o recurso para gerenciar os \textit{plugins}.
+
+Cada plugin pode ser desenvolvido como uma biblioteca, seguindo um padrão de desenvolvimento, implementando funções pré-definidas em uma interface (conforme ilustrada pela Figura \ref{fig:codigo_exemplo_plugin}). Isto permite que novos plugins sejam adicionados à arquitetura já existente, possibilitando que outros desenvolvedores adicionem novas estratégias para extração e indexação das informações contidas em textos LaTeX.
+
+No desenvolvimento deste trabalho, identificamos pontos que podem ser abordados em trabalhos futuros, tais como:
+\begin{itemize}
+    \item Desenvolver plugins que tenham suporte a outros formatos de artigos além do formato da SBC, pois este, atualmente, é o único formato de texto Latex que o InProLa consegue processar. Neste momento, o trabalho se concentrou neste formato, porque ser o escolhido para a escrita dos trabalhos de conclusão do curso, Bacharelado em Sistemas de Informação do IFBA, campus Vitória da Conquista;
+    \item Desenvolver plugins e/ou adapar os existentes para terem suporte de inteligência artificial. Exemplo: elaborar um plugin que possa realizar a descrição dos arquivos de imagem contidos em textos Latex;
+    \item Desenvolver um app mobile que tenha os mesmos recursos da página web, o que se encontra facilitado pelo fato da arquitetura do InProLa ter sido dividida entre frontend e backend com o processamento dos texto concentrados no backend. Um aplicativo móvel poderia fazer uso do mesmo backend;
+    \item Avaliar a solução em um cenário real, tal como, por exemplo, no IFBA, campus Vitória da Conquista, cujo curso de Bacharelado em Sistemas de Informação já vem utilizando artigos como formato de registro de trabalhos de conclusão, com intuito de coletar \textit{feedbacks} sobre a utilização do sistema. Com isso realizar melhorias na interface gráfica e na experiência de usuário.
+\end{itemize}
+
+\bibliographystyle{sbc}
+\bibliography{bibliografia}
+
+\newpage
+
+\noindent\textbf{APÊNDICE}
+
+Os conceitos adquiridos durante o curso de Bacharelado em Sistemas de Informação (BSI) pelo Instituto Federal de Educação, Ciência e Tecnologia da Bahia contribuíram para a construção do projeto, desde o levantamento teórico até a aplicação prática. A Figura \ref{fig:disciplinas} demonstra todas as disciplinas que contemplam a ementa do curso de BSI e que se relacionam de forma direta e indireta. 
+
+As disciplinas de Linguagem de Programação I e II e Programação Web foram as que mais influenciaram no desenvolvimento deste trabalho. Linguagem de Programação contribuiu no desenvolvimento do pensamento lógico. Programação Web traz a utilização da programação para web, como a utilização de HTML, CSS e Javascript, que foi o foco deste trabalho.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1.0\textwidth]{images/disciplinas.png}
+\caption{Disciplinas do Curso de BSI relacionadas à Realização do InProLa}
+\label{fig:disciplinas}
+\end{figure}
+
+\end{document}

@@ -1,0 +1,13 @@
+chatterbot
+chatterbot_corpus
+nltk # natural language toolkit
+flask
+
+pytesseract 
+pillow
+transformers
+torch
+
+langchain_google_genai
+protobuf
+langchain

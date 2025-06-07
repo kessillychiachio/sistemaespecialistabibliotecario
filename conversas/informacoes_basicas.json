@@ -1,0 +1,85 @@
+{
+    "conversas": [
+        {
+            "mensagens": [
+                "como renovar um livro?",
+                "quero renovar um empréstimo",
+                "renovar livro emprestado"
+            ],
+            "resposta": "Para renovar um livro, acesse o sistema da biblioteca com seu login ou compareça pessoalmente ao balcão de atendimento. A renovação está sujeita à disponibilidade da obra."
+        },
+        {
+            "mensagens": [
+                "qual o horário da biblioteca?",
+                "quando a biblioteca está aberta?",
+                "horário de funcionamento",
+                "qual horário?"
+            ],
+            "resposta": "A biblioteca funciona de segunda a sexta-feira, das 8h às 18h. Verifique no site oficial para horários especiais em feriados."
+        },
+        {
+            "mensagens": [
+                "como posso fazer uma pesquisa bibliográfica?",
+                "quero buscar livros sobre um tema",
+                "como pesquisar no acervo?"
+            ],
+            "resposta": "Você pode usar o catálogo online da biblioteca para fazer buscas por título, autor ou assunto. Se precisar de ajuda, procure um bibliotecário."
+        },
+        {
+            "mensagens": [
+                "vocês têm acesso a periódicos científicos?",
+                "quais bases de dados estão disponíveis?",
+                "tenho acesso à capes?"
+            ],
+            "resposta": "A biblioteca oferece acesso a diversas bases de dados, incluindo a CAPES. Para acessar, use o portal da biblioteca com suas credenciais institucionais."
+        },
+        {
+            "mensagens": [
+                "posso imprimir na biblioteca?",
+                "a biblioteca tem impressora?",
+                "como faço impressões?"
+            ],
+            "resposta": "Sim, a biblioteca oferece serviço de impressão para os usuários. Verifique as condições de uso e os valores na recepção."
+        },
+        {
+            "mensagens": [
+                "como faço para devolver um livro?",
+                "onde devo devolver o livro?",
+                "quero devolver um empréstimo"
+            ],
+            "resposta": "Os livros devem ser devolvidos diretamente no balcão de atendimento da biblioteca ou, quando disponível, na caixa de devolução externa."
+        },
+        {
+            "mensagens": [
+                "como faço para me cadastrar na biblioteca?",
+                "quero fazer um cadastro",
+                "como virar usuário da biblioteca?"
+            ],
+            "resposta": "O cadastro pode ser feito presencialmente na biblioteca com um documento de identificação, ou online pelo site, dependendo das políticas da instituição."
+        },
+        {
+            "mensagens": [
+                "posso emprestar livros sendo aluno?",
+                "quais usuários podem fazer empréstimos?",
+                "quem pode pegar livros emprestados?"
+            ],
+            "resposta": "Estudantes, professores e servidores regularmente cadastrados podem realizar empréstimos. Consulte os critérios e prazos específicos no regulamento da biblioteca."
+        },
+        {
+            "mensagens": [
+                "o que acontece se atrasar a devolução?",
+                "tem multa por atraso?",
+                "esqueci de devolver o livro no prazo"
+            ],
+            "resposta": "Em caso de atraso, pode ser aplicada multa diária por item. Regularize o quanto antes para evitar restrições ao uso da biblioteca."
+        },
+        {
+            "mensagens": [
+                "a biblioteca oferece orientação para trabalhos acadêmicos?",
+                "posso pedir ajuda para formatar monografia?",
+                "vocês ajudam com normas da abnt?"
+            ],
+            "resposta": "Sim, a biblioteca oferece orientação sobre normas de formatação (como ABNT) e uso de referências. Procure o serviço de apoio ao usuário para agendar um horário."
+        }
+    ]
+}

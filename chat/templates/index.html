@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ChatBot Akhenaton</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="chat-container">
+        <div id="chat-box" class="chat-box"></div>
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Digite sua mensagem..." autocomplete="off">
+            <button id="send-button" class="send-button" onclick="enviarMensagem()">enviar</button>
+            <button id="search-button-keywords" class="search-button-keywords" onclick="pesquisarArtigos('chaves')">🔍</button>
+            <button id="search-button-areas" class="search-button-areas" onclick="pesquisarArtigos('areas')">🧠</button>
+        </div>
+    </div>
+
+    <script>
+        function exibirMensagem(mensagem, remetente) {
+            const chatBox = document.getElementById("chat-box");
+            const messageElement = document.createElement("div");
+            messageElement.className = remetente;
+
+            if (remetente === "bot") {
+                mensagem = mensagem + " 🤖";
+            } else {
+                mensagem = "👤 " + mensagem;
+            }
+            messageElement.textContent = mensagem;
+
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function exibirArtigo(artigo) {
+            const chatBox = document.getElementById("chat-box");
+            const messageElement = document.createElement("div");
+            messageElement.className = "bot";
+
+            const link = document.createElement("a");
+            link.href = artigo.link;
+            link.innerText = artigo.titulo;
+            link.target = "_self";
+            messageElement.appendChild(link);
+
+            const detalhes = document.createElement("button");
+            detalhes.innerText = "❓";
+            detalhes.className = "details-button";
+            detalhes.onclick = function() {
+                alert("exibindo detalhes do artigo com ID#" + artigo.id);
+            }
+            messageElement.appendChild(detalhes);
+
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function pesquisarArtigos(modo) {
+            fetch("/responder", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ "pergunta": "quero pesquisar artigos", "modo": modo })
+            }).then(resposta => resposta.json())
+                .then(conteudo => {
+                    exibirMensagem(conteudo.resposta, "bot");
+                })
+        }
+
+        function enviarMensagem() {
+            const input = document.getElementById("user-input");
+            const mensagem = input.value.trim();
+            if (!mensagem) return;
+
+            exibirMensagem(mensagem, "user");
+            input.value = "";
+
+            fetch("/responder", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ "pergunta": mensagem })
+            }).then(resposta => resposta.json())
+                .then(conteudo => {
+                    if (conteudo.artigos_pesquisados) {
+                        if (conteudo.artigos.length) {
+                            exibirMensagem("Encontrei estes artigos:", "bot");
+                            conteudo.artigos.forEach(artigo => {
+                                exibirArtigo(artigo);
+                            });
+
+                        }
+                    }
+
+                    exibirMensagem(conteudo.resposta, "bot");
+                })
+        }
+
+        document.getElementById("user-input").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") enviarMensagem();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,395 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% How to use writeLaTeX: 
+%
+% You edit the source code here on the left, and the preview on the
+% right shows you the result within a few seconds.
+%
+% Bookmark this page and share the URL with your co-authors. They can
+% edit at the same time!
+%
+% You can upload figures, bibliographies, custom classes and
+% styles using the files menu.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{article}
+
+\usepackage{sbc-template}
+
+\usepackage{graphicx,url}
+
+\usepackage{float}
+
+\usepackage[brazil]{babel}   
+\usepackage[utf8]{inputenc}  
+
+\usepackage{hyperref}
+
+\usepackage{appendix}
+
+     
+\sloppy
+
+\title{Uma Arquitetura para um Aplicativo de Visualização de Objetos Educacionais 3D: o caso EducaRA}
+
+\author{Samuel Alves Lopes, Luis Paulo da Silva Carvalho, Camilo Alves Carvalho}%marcador_fim_author
+
+
+\address{Instituto Federal de Educação, Ciência e Tecnologia da Bahia (IFBA)\\
+  Av. Sérgio Vieira de Melo, 3150 - Zabelê, Vitória da Conquista - BA, 45078-300
+}
+
+\begin{document} 
+
+\maketitle
+
+\begin{abstract}
+This paper presents the development of EducaRA, an educational application that uses Augmented Reality (AR) to provide an immersive and interactive learning experience. The goal of EducaRA is to enhance the understanding of abstract concepts through the 3D visualization of educational models on mobile devices. The platform was designed to offer two versions of the application: the FULL version, which uses AR with ARCore, and the REDUX version, which dispenses with AR, providing a 3D visualization experience for a wider range of devices. The system adopts a modular architecture, allowing flexibility in implementation and maintenance, while ensuring continuous evolution of the app. The research also compares EducaRA with other similar works using AR for education and suggests directions for future improvements, including practical testing in educational settings. EducaRA stands as an innovative tool focused on expanding the possibilities of digital learning, accessible to a broader audience.
+\end{abstract}
+     
+\begin{resumo} 
+Este trabalho apresenta o desenvolvimento do EducaRA, um aplicativo educacional que utiliza a Realidade Aumentada (RA) para proporcionar uma experiência de aprendizado imersiva e interativa. O objetivo do EducaRA é melhorar a compreensão de conceitos abstratos por meio da visualização 3D de modelos educacionais em dispositivos móveis. A plataforma foi projetada para oferecer duas versões do aplicativo: a versão FULL, que utiliza RA com ARCore, e a versão REDUX, que dispensa o uso de RA, proporcionando uma experiência de visualização 3D para uma maior variedade de dispositivos. O sistema adota uma arquitetura modular, permitindo flexibilidade na implementação e manutenção, além de garantir a evolução contínua do aplicativo. A pesquisa também aborda comparações com outros trabalhos similares no uso de RA para educação e sugere direções para melhorias futuras, incluindo testes práticos em ambientes educacionais. O EducaRA se posiciona como uma ferramenta inovadora, com foco em expandir as possibilidades de aprendizado digital, acessível a um público mais amplo.
+\end{resumo}
+
+\section{Introdução}
+
+Os avanços tecnológicos têm desempenhado um papel transformador na educação, promovendo abordagens inovadoras para o ensino e a aprendizagem. De acordo com \cite{de2019realidade}, a utilização da Realidade Virtual na educação está relacionada a seu emprego como ambiente de aprendizagem, por meio da possibilidade de imersão em ambientes virtuais ou mesmo pela criação de objetos virtuais que permitam “aumentar” ou complementar a percepção do mundo real, auxiliando no processo educacional por meio de novas formas de visualização e objetos de estudo inacessíveis. Uma das aplicações mais promissoras da RA é a utilização de objetos educacionais 3D em dispositivos móveis, proporcionando uma alternativa envolvente e dinâmica para as aulas tradicionais \cite{dos2024gamificaccao}.
+
+Segundo \cite{rezende2021realidade}, as potencialidades pedagógicas de situações de aprendizagem envolvendo novas tecnologias são vastas e promissoras. Em virtude da flexibilidade de tais recursos, é possível desenvolver cenários que contemplem diferentes estilos de aprendizagem, contribuindo para aumentar o engajamento de estudantes com diferentes perfis nas atividades escolares. Neste sentido, voltamos nossos esforços para aplicar RA em um aplicativo móvel chamado EducaRA. O EducaRA visa não apenas atender à demanda por inovação, mas também superar obstáculos práticos que poderiam comprometer a efetividade do uso da RA em sala de aula. 
+
+Um dos principais desafios da educação tradicional é tornar conceitos abstratos e complexos mais acessíveis e compreensíveis para os alunos. De acordo com \cite{de2019realidade}, a Realidade Aumentada (RA) se destaca nesse sentido, por meio da possibilidade de imersão em ambientes virtuais ou mesmo pela criação de objetos virtuais que complementam a percepção do mundo real. A Realidade Aumentada surge como uma ferramenta promissora para superar essas limitações, impulsionando uma educação mais imersiva, significativa, personalizada e contextualizada, preparando os alunos para os desafios do século XXI.
+
+Considerando a abordagem tecnológica adotada, visamos utilizar o ARCore \footnote{\href{https://developers.google.com/ar?hl=pt-br}{https://developers.google.com/ar?hl=pt-br}} da Google, que permite a exibição de objetos 3D sem a necessidade de marcadores (mais detalhes na Seção \ref{sec:arcore}). O objetivo é que o EducaRA ofereça uma experiência de Realidade Aumentada mais imersiva e interativa para os alunos. Com esse recurso, os estudantes podem visualizar modelos tridimensionais de conceitos complexos diretamente em seus dispositivos móveis, o que pode ajudar a melhorar a compreensão e a retenção do conteúdo educacional.
+
+O desenvolvimento do EducaRA se justifica pela sua contribuição potencial para aprimorar a qualidade do ensino, tornando-o mais atrativo, acessível e eficiente. Essa iniciativa visa não apenas incorporar inovações tecnológicas, mas também promover uma revolução positiva no modo como os alunos absorvem o conhecimento em ambientes educacionais. Resumidamente, o objetivo geral deste projeto é desenvolver uma arquitetura robusta e flexível para um aplicativo que utiliza Realidade Aumentada (RA) em dispositivos móveis.
+
+Neste trabalho, apresentamos o desenvolvimento do EducaRA, um aplicativo educacional que utiliza Realidade Aumentada para promover um aprendizado mais imersivo e interativo. A Seção \ref{sec:metodologia} detalha a metodologia empregada para o desenvolvimento do aplicativo, desde o levantamento de requisitos até os testes e validação. Na Seção \ref{sec:fundamentacao-teorica}, apresentamos a fundamentação teórica e prática que sustenta o projeto, explorando conceitos como Realidade Aumentada e ARCore. A Seção \ref{sec:versoes-educara} descreve as duas versões do EducaRA: a FULL, que utiliza Realidade Aumentada com ARCore, e a REDUX, que oferece uma experiência de visualização 3D para dispositivos sem suporte ao ARCore. A Seção \ref{sec:arquitetura} apresenta a arquitetura modular do aplicativo, destacando os componentes que garantem sua flexibilidade e escalabilidade. Na Seção \ref{sec:trabalhos-relacionados}, realizamos uma revisão da literatura, comparando o EducaRA com outros trabalhos similares e identificando suas principais contribuições. Por fim, na última seção, apresentamos as conclusões do trabalho e discutimos as perspectivas futuras para o desenvolvimento do aplicativo.
+
+\section{Metodologia}\label{sec:metodologia}
+
+Esta pesquisa pode ser classificada como aplicada. O desenvolvimento do EducaRA tem como consequência prática a criação de um produto que melhore o processo de ensino e aprendizagem, incorporando inovações tecnológicas como a Realidade Aumentada. A intenção é desenvolver um aplicativo que possa ser utilizado diretamente no contexto educacional, atendendo às necessidades específicas dos alunos e professores.
+
+A metodologia para o desenvolvimento do aplicativo EducaRA foi estruturada em várias etapas, conforme exibido na Figura \ref{fig:fluxograma_educara}. A seguir descrevemos cada um dos passos realizados.
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=0.4\textwidth]{fluxograma_educara.png}
+  \caption{Fluxograma do projeto}
+  \label{fig:fluxograma_educara}
+\end{figure}
+
+\begin{itemize} 
+\item \textbf{Levantamento de Requisitos} 
+
+\begin{itemize}
+    \item Realizar um levantamento detalhado dos requisitos, analisando as necessidades educacionais e entendendo as demandas das disciplinas escolares;
+    \item Coletar informações das partes interessadas, incluindo professores e alunos, para identificar suas expectativas e necessidades específicas.
+\end{itemize}
+\end{itemize}
+
+\begin{itemize}
+\item \textbf{Definição da Arquitetura}
+
+\begin{itemize}
+    \item Definir uma arquitetura robusta e flexível para o EducaRA, utilizando a linguagem Kotlin para programação;
+    \item Planejar a integração eficiente com a plataforma ARCore da Google para a renderização de objetos educacionais 3D;
+    \item Estruturar o aplicativo em módulos reutilizáveis, facilitando a manutenção e a expansão futuras.
+\end{itemize}
+\end{itemize}
+
+\begin{itemize}
+\item \textbf{Desenvolvimento Iterativo}
+
+\begin{itemize}
+    \item Adotar uma abordagem iterativa, implementando protótipos e realizando testes frequentes;
+    \item Garantir a eficácia da experiência de Realidade Aumentada e a interatividade desejada através de testes contínuos.
+\end{itemize}
+\end{itemize}
+
+\begin{itemize}
+\item \textbf{Sincronização de Dados}
+
+\begin{itemize}
+    \item Definir uma estratégia para a sincronização de dados, permitindo o acesso offline aos conteúdos educacionais;
+    \item Implementar mecanismos de armazenamento local e atualização de dados, considerando a disponibilidade e confiabilidade da conexão à internet.
+\end{itemize}
+\end{itemize}
+
+\begin{itemize}
+\item \textbf{Testes e Validação}
+
+\begin{itemize}
+    \item Realizar testes de viabilidade técnica para avaliar a estabilidade e usabilidade do aplicativo. A avaliação formal em sala de aula será realizada em uma etapa posterior, com o objetivo de coletar dados sobre a efetividade do EducaRA no processo de ensino e aprendizagem.
+\end{itemize}
+\end{itemize}
+
+\begin{itemize} 
+\item \textbf{Documentação}
+
+\begin{itemize}
+    \item Disponibilizar uma documentação abrangente, incluindo manuais de uso, guias de desenvolvimento e especificações técnicas;
+    \item Registrar o desenvolvimento e os resultados do projeto na forma de um artigo durante o andamento da disciplina TCC 2.
+\end{itemize}
+\end{itemize}
+
+\section{Fundamentação Teórica e Prática}\label{sec:fundamentacao-teorica}
+
+Nesta seção, são apresentados e discutidos os principais conceitos e tecnologias que fundamentam o desenvolvimento do aplicativo EducaRA. A compreensão teórica e prática desses elementos é essencial para garantir a eficácia e inovação do projeto.
+
+\subsection{Realidade Aumentada}
+
+A Realidade Aumentada (RA) é uma tecnologia que integra elementos virtuais ao ambiente físico do usuário em tempo real. Diferentemente da Realidade Virtual, que imerge completamente o usuário em um ambiente digital, a RA superpõe objetos virtuais ao mundo real, mantendo o senso de presença física do usuário. As bases da RA surgiram na década de 1960 com Ivan Sutherland, que desenvolveu um capacete de visão ótica direta para visualização de objetos 3D no ambiente real \cite{kirner2011evoluccao}.
+
+Na década de 1980, a Força Aérea Americana desenvolveu o primeiro projeto de RA, um simulador de cockpit de avião que misturava elementos virtuais com o ambiente físico do usuário \cite{kirner2011evoluccao}. A RA combina multimídia e realidade virtual para apresentar elementos misturados de boa qualidade e interação em tempo real, utilizando recursos tecnológicos invisíveis ao usuário, como rastreamento ótico, projeções e interações multimodais \cite{kirner2011evoluccao}.
+
+\cite{azuma1997survey} definiu a RA como um sistema que possui três características principais: combina o real com o virtual, é interativa em tempo real e ajusta objetos virtuais no ambiente 3D. Além disso, a RA enriquece o mundo real com informações virtuais geradas por computador, percebidas através de dispositivos tecnológicos \cite{kirner2011evoluccao}.
+
+\subsection{ARCore}\label{sec:arcore}
+
+A ARCore é a plataforma do Google para a criação de experiências de Realidade Aumentada. Lançada em 2018, a ARCore utiliza APIs que permitem ao smartphone detectar o ambiente, entender o mundo e interagir com informações \cite{google_arcore}. Esta plataforma usa três recursos principais para integrar conteúdo virtual ao mundo real:
+
+\begin{enumerate}
+    \item O ARCore utiliza um processo de \textit{Simultaneous Localization And Mapping} (SLAM) ou, em português, localização e mapeamento simultâneos.
+    Esse processo permite que o ARCore monitore a posição do smartphone em relação ao mundo ao redor.
+    Ele faz isso combinando informações visuais capturadas pela câmera com medidas obtidas a partir da \textit{Inertial Measurement Units} (IMU), ou unidade de medida inercial, do dispositivo.
+    Com essas informações, o ARCore estima a posição da câmera ao longo do tempo;
+    \item Compreensão Ambiental: o ARCore detecta superfícies horizontais, verticais e inclinadas, e disponibiliza essas superfícies para o aplicativo como planos geométricos. Ele também pode determinar o limite de cada plano geométrico e disponibilizar essas informações para o aplicativo, permitindo a colocação precisa de objetos virtuais em superfícies planas;
+    \item Estimativa de Luz: o ARCore estima as condições de iluminação do ambiente, permitindo que objetos virtuais sejam iluminados de acordo com o ambiente real, aumentando a sensação de realismo.
+\end{enumerate}
+
+O ARCore é amplamente utilizado em diversas áreas, incluindo educação, saúde, varejo e entretenimento. Na educação, por exemplo, ele permite que alunos visualizem modelos tridimensionais de conceitos complexos diretamente em seus dispositivos móveis, facilitando a compreensão e a retenção do conteúdo educacional \cite{cavalcante2024explorando}.
+
+Infelizmente, nem todos os dispositivos Android possuem compatibilidade com o ARCore, pois esta tecnologia é exclusiva do sistema operacional Android, desenvolvido pela Google. Para que um dispositivo seja compatível, ele deve atender a determinados requisitos de hardware e software, como câmeras e sensores específicos necessários para suportar as funcionalidades de Realidade Aumentada.
+A lista de dispositivos compatíveis se encontra disponível no site oficial do ARCore\footnote{\href{https://developers.google.com/ar/devices}{https://developers.google.com/ar/devices}}. Isso significa que, embora muitos dispositivos Android modernos sejam compatíveis, alguns modelos mais antigos ou de entrada podem não oferecer suporte a essa tecnologia, limitando o acesso a experiências de Realidade Aumentada para esses usuários. Vale destacar que o ARCore não é aplicável a dispositivos com outros sistemas operacionais, como iOS, já que é uma tecnologia voltada exclusivamente para Android. 
+
+\section{Versões do EducaRA}\label{sec:versoes-educara}
+
+O aplicativo EducaRA foi desenvolvido para proporcionar uma experiência educacional enriquecida utilizando tecnologias de Realidade Aumentada (RA) e visualização 3D. Para atender às diversas necessidades e capacidades de dispositivos, o EducaRA está  disponível em duas versões distintas: a versão FULL e a versão REDUX.
+
+\subsection{Versão FULL}
+
+A versão FULL do EducaRA foi projetada para dispositivos que possuem suporte ao ARCore da Google. O ARCore permite a criação de experiências de RA avançadas, integrando conteúdo virtual ao ambiente físico do usuário. Através do rastreamento de movimento, compreensão ambiental e estimativa de luz, a versão FULL oferece uma interação altamente realista e imersiva com objetos educacionais em RA. São, portanto, características da versão FULL:
+
+\begin{itemize}
+      \item Requer suporte ao ARCore: a utilização do ARCore é essencial para a implementação de funcionalidades avançadas de RA;
+    \item Interatividade em RA: os usuários podem visualizar e interagir com modelos tridimensionais diretamente no ambiente físico, tornando o aprendizado mais dinâmico e intuitivo;
+    \item Riqueza de detalhes: a versão FULL aproveita as capacidades do ARCore para fornecer uma experiência visual detalhada e realista, ajustando objetos virtuais de acordo com o ambiente real.
+\end{itemize}
+
+Para mais detalhes sobre os problemas enfrentados e as soluções durante a implementação, consulte a Tabela~\ref{tab:problemas_solucoes} no Apêndice~\ref{sec:apendice_problemas}.
+
+% \begin{figure}[!htb]
+%   \centering
+%   \includegraphics[width=0.5\textwidth]{educara_full.png}
+%   \caption{Tela do EducaRA com uma molécula de Propanol em Realidade Aumentada}
+%   \label{fig:educara_full}
+% \end{figure}
+
+% A Figura \ref{fig:educara_full} exibe uma tela do aplicativo EducaRA, que mostra uma molécula de Propanol em 3D utilizando Realidade Aumentada. Na tela, a molécula é apresentada de forma detalhada, com átomos e ligações químicas claramente visíveis. O fundo da imagem inclui elementos do ambiente real capturado pela câmera do dispositivo, ilustrando como o objeto virtual é integrado ao mundo real.
+
+\subsection{Versão REDUX}
+
+Para ampliar a acessibilidade do EducaRA, foi desenvolvida a versão REDUX, que não possui o requisito de suporte ao ARCore. Em vez de usar o RA, a versão REDUX utiliza visualização 3D diretamente no dispositivo, permitindo que mais usuários, mesmo aqueles com dispositivos sem suporte ao ARCore, possam beneficiar-se das funcionalidades educacionais do aplicativo. São características da versão REDUX:
+
+\begin{itemize}
+    \item Compatibilidade ampla: a versão REDUX é compatível com uma maior variedade de dispositivos, não exigindo suporte ao ARCore;
+    \item Visualização 3D: em substituição ao RA, os objetos educacionais são apresentados em 3D na tela do dispositivo, proporcionando uma experiência visual rica e interativa;
+\end{itemize}
+
+% \begin{figure}[!htb]
+%   \centering
+%   \includegraphics[width=0.5\textwidth]{educara_redux.png}
+%   \caption{Tela do EducaRA com uma molécula de Propanol em visualização 3d}
+%   \label{fig:educara_redux}
+% \end{figure}
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{educara_full.png}
+    \caption{Tela do EducaRA (FULL) com uma molécula de Propanol em Realidade Aumentada.}
+    \label{fig:educara_full}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{educara_redux.png}
+    \caption{Tela do EducaRA (REDUX) com uma molécula de Propanol em visualização 3D.}
+    \label{fig:educara_redux}
+  \end{minipage}
+\end{figure}
+
+% A Figura \ref{fig:educara_redux} exibe a tela do aplicativo EducaRA na versão REDUX, exibindo uma molécula de Propanol em 3D sem o uso de Realidade Aumentada. O fundo da imagem é um simples plano de fundo do aplicativo, sem a integração com o ambiente real. A versão REDUX mantém a funcionalidade essencial do EducaRA, garantindo compatibilidade com uma maior variedade de dispositivos, pois não exige suporte ao ARCore, proporcionando acesso ao conteúdo educacional a todos os usuários, independentemente das capacidades de seus dispositivos.
+
+As Figuras \ref{fig:educara_full} e \ref{fig:educara_redux} permitem comparar as duas versões do EducaRA. A versão FULL utiliza Realidade Aumentada para integrar os objetos ao ambiente físico, enquanto a versão REDUX oferece uma visualização 3D diretamente na tela, sem a necessidade de suporte ao ARCore. Ambas as versões garantem uma experiência educacional interativa e enriquecedora, adaptada às capacidades dos dispositivos dos usuários.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{fluxo-navegacao-educara.png}
+  \caption{Fluxo de navegação (UI) do Educara (FULL e REDUX)}
+  \label{fig:fluxo-ui-educara}
+\end{figure}
+
+A Figura \ref{fig:fluxo-ui-educara} apresenta o fluxo de navegação do EducaRA, abrangendo as versões FULL e REDUX em um único fluxograma. O processo começa na tela de inicialização, onde é verificada a compatibilidade do dispositivo com o ARCore. Caso seja compatível (FULL), o fluxo inclui a exibição de objetos 3D com Realidade Aumentada. Para dispositivos não compatíveis (REDUX), os objetos são exibidos apenas em 3D. Em ambas as versões, o usuário navega por telas de disciplinas, aulas e conteúdos, mantendo uma experiência consistente e adaptada às capacidades do dispositivo.
+
+\section{Arquitetura do EducaRA}\label{sec:arquitetura}
+
+Para suportar as duas versões do EducaRA, FULL e REDUX, de maneira eficiente e flexível, foi adotada uma arquitetura modular, ideal para a criação de softwares móveis \cite{gomes2023modularizaccao}. Esta abordagem particiona o aplicativo em sub-sistemas, permitindo que tanto a versão FULL quanto a REDUX compartilhem componentes comuns e utilizem funcionalidades específicas de acordo com suas necessidades.
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=0.8\textwidth]{arquitetura_educara_2.png}
+  \caption{Componentes da arquitetura do EducaRA}
+  \label{fig:arquitetura_educara}
+\end{figure}
+
+De acordo com o exibido na Figura \ref{fig:arquitetura_educara}, os principais componentes da arquitetura modular do EducaRA são:
+
+\begin{itemize}
+    \item Biblioteca para Visualização 3D: utilizada pela versão REDUX para renderização e interação com modelos tridimensionais diretamente na tela do dispositivo;
+    \item Biblioteca para Visualização com RA: exclusiva da versão FULL, esta biblioteca integra-se ao ARCore para oferecer experiências de RA imersivas;
+    \item Biblioteca para Telas Comuns: conjunto de interfaces e funcionalidades compartilhadas entre as duas versões do EducaRA, garantindo consistência na usabilidade e na apresentação do conteúdo educacional;
+    \item \textit{Back-end} de Objetos Educacionais 3d: gerencia o armazenamento, e disponibiliza uma API para consulta dos dados e objetos 3D. Para este trabalho, foi desenvolvido um \textit{Back-end} provisório. Outro Trabalho de Conclusão do Curso de Bacharelado de Sistema de Informação do IFBA, campus Vitória da Conquista, foi encarregado de conduzir o desenvolvimento do \textit{Back-end} oficial do EducaRA.
+\end{itemize}
+
+Uma arquitetura modular não só facilita a manutenção e expansão do aplicativo, mas também assegura que melhorias e atualizações possam ser implementadas de forma eficiente \cite{gomes2023modularizaccao}. A modularidade permite adicionar novas funcionalidades ou atualizar componentes específicos sem afetar todo o sistema, promovendo uma evolução contínua do EducaRA.
+
+\section{Trabalhos Relacionados}\label{sec:trabalhos-relacionados}
+
+Nesta seção, apresentamos uma seleção de trabalhos relevantes que exploram a integração da Realidade Aumentada (RA) no contexto educacional, oferecendo \textit{insights} e contribuições significativas para aprimorar a experiência de ensino e aprendizagem.
+O QuiRA \cite{soares2018quira} é um aplicativo móvel projetado para transformar o ensino de Química Orgânica. Utilizando a tecnologia de Realidade Aumentada, o QuiRA permite aos alunos visualizar moléculas orgânicas em 3D e interagir com elas em um ambiente virtual. Ao tornar os conceitos químicos mais tangíveis e acessíveis, o QuiRA oferece uma abordagem envolvente e imersiva para o aprendizado da Química Orgânica.O QuiRA foi a base inicial para o desenvolvimento do EducaRA, influenciando principalmente no uso de RA para visualização de conteúdo educacional. 
+
+O AppiRAmide é uma ferramenta educacional que utiliza Realidade Aumentada para facilitar o estudo da Geometria Espacial \cite{de2016usando}. Por meio deste aplicativo móvel, os alunos podem visualizar e manipular pirâmides em 3D, explorando diferentes propriedades geométricas de forma interativa e intuitiva. O AppiRAmide promove uma compreensão de conceitos geométricos, tornando o aprendizado da Geometria mais acessível.
+
+Em seu trabalho, \cite{denardin2017desenvolvimento} investigam o potencial da Realidade Aumentada (RA) como ferramenta educacional no ensino de Física. Ao integrar a RA com o software LAYAR, os pesquisadores desenvolveram atividades interativas e visualizações imersivas que ajudam os alunos a compreender conceitos físicos abstratos de maneira concreta e acessível. A abordagem apresentada neste trabalho demonstra como a RA pode transformar a experiência de aprendizagem em sala de aula.
+
+O DoctorBio \cite{araujo2017doctorbio} é um projeto educacional que utiliza Realidade Aumentada para enriquecer o ensino de Ciências Biológicas. Através da plataforma Aurasma, o DoctorBio permite aos alunos explorar conceitos biológicos complexos de forma interativa e envolvente. Ao transformar smartphones em ferramentas educacionais, o DoctorBio promove uma aprendizagem ativa e colaborativa.
+
+O trabalho de \cite{palhano2019realidade} apresentam uma pesquisa sobre uma oficina realizada com alunos dos oitavo e nono anos de um colégio estadual. Um jogo e a Realidade Aumentada foram utilizados para abordar sólidos geométricos. A coleta de dados, feita por meio de questionário, revelou que a maioria dos alunos desconhecia a RA e que o uso de jogos e softwares no ensino de geometria não era uma prática comum. Os alunos mostraram interesse em ver mais aplicações de RA na matemática. O jogo foi bem aceito, embora considerado difícil por alguns, despertou o interesse e a motivação para estudar conceitos matemáticos, propiciando a compreensão das propriedades dos sólidos geométricos.
+
+Em comparação com outros aplicativos educacionais com Realidade Aumentada aqui citados, o EducaRA destaca-se por sua independência de marcadores físicos e pela flexibilidade de sua arquitetura. Enquanto muitos aplicativos dependem da identificação de marcadores físicos para exibir objetos virtuais, o EducaRA utiliza a plataforma ARCore, eliminando tal necessidade e proporcionando uma experiência mais fluida e intuitiva. 
+
+Na Figura \ref{fig:quira} se encontra um exemplo de marcador físico usado pelo QuiRa \cite{soares2018quira} e comumente utilizados por outras soluções de Realidade Aumentada, mas que são dispensados
+quando se usa o ARCore.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{quira.png}
+  \caption{Visualização das moléculas Butanal e Propanona no App QuiRA, com uso de marcadores}
+  \label{fig:quira}
+\end{figure}
+
+Outro diferencial significativo é a disponibilidade de duas versões distintas (FULL e REDUX), o que garante que um maior número de usuários, independentemente das capacidades de seus dispositivos, possa beneficiar-se das funcionalidades educacionais oferecidas. O EducaRA também se diferencia por abranger diversas áreas do conhecimento, enquanto outros aplicativos tendem a focar em uma única disciplina. Embora inicialmente esteja focado na química, desde o início o EducaRA foi pensado para atender qualquer área educacional, tornando-o uma solução mais brangente.
+
+% O código-fonte do EducaRA está disponibilizado abertamente, promovendo transparência e colaboração, o que nem sempre se encontra disponibilizado pelos trabalhos correlatos aqui apresentados (mais detalhes na Seção \ref{sec:contribuicoes}).
+
+\section{Utilização do EducaRA}
+
+A Figura \ref{fig:qrcode-full} contém um \href{https://www.youtube.com/watch?v=WBM7_cAoGCM}{video}  de apresentação do Software EducaRA funcionando com uso de Realidade Aumentada, em sua versão FULL.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{qrcode-video-apresetacao.png}
+  \caption{\href{https://www.youtube.com/watch?v=WBM7_cAoGCM}{Apresentação do Software EducaRA versão FULL}}
+  \label{fig:qrcode-full}
+\end{figure}
+
+A Figura \ref{fig:qrcode-redux} contém um \href{https://youtube.com/shorts/jFEH1u57GtI}{video} do Software EducaRA funcionando sem o uso de Realidade Aumentada, em sua versão REDUX.
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=0.5\textwidth]{qrcode-video-apresetacao-redux.png}
+  \caption{\href{https://youtube.com/shorts/jFEH1u57GtI}{Apresentação do Software EducaRA versão REDUX}}
+  \label{fig:qrcode-redux}
+\end{figure}
+
+Para instalar e usar o EducaRA em um dispositivo móvel, os passos indicados na Figura \ref{fig:qrcode-uso} devem ser realizados.
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=0.5\textwidth]{qrcode-instalacao-educara.png}
+  \caption{\href{https://drive.google.com/file/d/1II7FLlL0nzuAuikvs874JeZjUGYR2WhQ/view?usp=sharing}{Instruções de Instalação e Uso do EducaRA}}
+  \label{fig:qrcode-uso}
+\end{figure}
+
+\section{Conclusão}\label{sec:conclusao}
+
+O desenvolvimento de aplicações com Realidade Aumentada apresenta uma série de desafios técnicos, principalmente na etapa inicial. Identificar uma plataforma confiável e eficiente para trabalhar com essa tecnologia foi uma das primeiras barreiras. Além disso, o desenvolvimento exige atenção especial à compatibilidade com diferentes dispositivos, que frequentemente dependem de requisitos técnicos avançados, como câmeras específicas e sensores, além de versões de software atualizadas.
+
+O EducaRA não apenas aborda as limitações da educação tradicional, mas também reforça a relevância de tecnologias como a Realidade Aumentada no enfrentamento dos desafios educacionais do século XXI. Com sua proposta de aprendizado imersivo e personalizado, o aplicativo representa um avanço significativo no uso de ferramentas digitais para transformar a experiência educacional, criando novas oportunidades para o ensino de conceitos abstratos e contribuindo para uma educação mais eficiente e atraente.
+
+Assim, o EducaRA se posiciona como um exemplo prático do impacto positivo da integração entre tecnologia e educação, pavimentando o caminho para futuras inovações que possam ampliar ainda mais o alcance e a eficácia do ensino mediado por recursos tecnológicos.
+
+Por fim, o desenvolvimento do EducaRA foi profundamente influenciado pelos conceitos adquiridos ao longo do curso de Bacharelado em Sistemas de Informação. As disciplinas relacionadas, que forneceram a base teórica e prática para a construção deste projeto, estão detalhadas no Apêndice \ref{sec:disciplinas_relacionadas}.
+
+
+\subsection{Trabalhos Futuros}
+
+Com a primeira versão da aplicação disponibilizada, um dos próximos passos inclui a adição de recursos de Observabilidade ao sistema, possibilitando uma análise mais detalhada sobre o uso da tecnologia de Realidade Aumentada. São exemplos de recursos de observabilidade que podem ser incluídos ao EducaRA:
+
+\begin{itemize}
+\item Identificação do perfil tecnológico de dispositivos: adicionar funcionalidades que registrem informações sobre a marca e o modelo do dispositivo, bem como o tipo de conexão utilizada (Wi-Fi, 4G, 5G) e a compatibilidade com o ARCore, para avaliar o impacto desses fatores na experiência do usuário;
+
+\item Desenvolver um \textit{Back-end} para o EducaRA: conforme explicado na Seção \ref{sec:arquitetura}, o \textit{Back-end} desenvolvido e utilizado durante a realização deste trabalho é provisório. Um trabalho futuro importante deve desenvolver um novo \textit{Back-end} mais robusto e capaz de suportar outras funcionalidades, tal como, por exemplo, o monitoramento do perfil tecnólogico de dispositivos previamente mencionado;
+
+\item Realizar testes de uso do EducaRA em um cenário real: durante este trabalho, foi desenvolvida uma arquitetura de software móvel orientada ao uso de Realidade Aumentada e foi codificado um software baseado nesta arquitetura. Todavia, uma pergunta importante ainda persiste: o uso de um aplicativo como o EducaRA tem impacto realmente positivo no ensino em sala de aula? Obter a resposta depende da realização de um trabalho futuro que tenha como objetivo testar o aplicativo durante atividades de ensino.
+\end{itemize}
+
+\subsection{Contribuições}\label{sec:contribuicoes}
+
+% Através do QRCode contido na Figura \ref{fig:qrcode-repositorio} é disponibilizado o link para acesso ao repositório no Github. O código-fonte se encontra inteiramente disponibilizado, podendo ser reaproveitado para futuras contribuições com o projeto ou a criação de outros baseados em Realidade Aumentada.
+
+% \begin{figure}[!htb]
+%   \centering
+%   \includegraphics[width=0.5\textwidth]{qrcode-github.png}
+%   \caption{Repositório do projeto no Github}
+%   \label{fig:qrcode-repositorio}
+% \end{figure}
+
+Atualmente, está tramitando, através do IFBA, um processo para registro de software do EducaRA. Por esse motivo, o acesso ao repositório no Github permanece privado. 
+
+\bibliographystyle{sbc}
+\bibliography{referencias}
+
+\newpage
+
+\appendix
+
+\section{Apêndice: Disciplinas relacionadas}
+\label{sec:disciplinas_relacionadas}
+
+Os conceitos adquiridos durante o curso de Bacharelado em Sistemas de Informação (BSI) pelo Instituto Federal de Educação, Ciência e Tecnologia da Bahia contribuíram para a construção do projeto, desde o levantamento teórico até a aplicação prática. A Figura \ref{fig:disciplinas} demonstra todas as disciplinas que contemplam a ementa do curso de BSI e que se relacionam de forma direta e indireta.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1.0\textwidth]{conceitos-adquiridos.png}
+\caption{Disciplinas do Curso de BSI relacionadas à Realização do EducaRA}
+\label{fig:disciplinas}
+\end{figure}
+
+\newpage
+
+\section{Apêndice: Problemas e Soluções}
+\label{sec:apendice_problemas}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|p{6cm}|c|p{6cm}|}
+\hline
+\textbf{Problema} & \textbf{Resolvido?} & \textbf{Solução} \\ \hline
+Sceneform não é suportado no dispositivo. & Sim & Verificação realizada com \texttt{Sceneform.isSupported(this)} antes de inicializar o fragmento de AR. \\ \hline
+Objeto não aparece no plano ao ser tocado. & Sim & Ancoragem é criada com \texttt{hitResult.createAnchor()} e adicionada à cena via \texttt{AnchorNode}. \\ \hline
+Falta de escala adequada para o modelo 3D. & Sim & A escala é configurada manualmente para \texttt{Vector3(0.1f, 0.1f, 0.1f)} no \texttt{AnchorNode}. \\ \hline
+Problemas ao rotacionar o modelo automaticamente. & Sim & Uso de \texttt{ValueAnimator} para realizar rotação contínua e lógica para pausar/retomar quando tocado. \\ \hline
+Configuração de sessão com suporte à profundidade. & Sim & Verificação se o dispositivo suporta \texttt{Config.DepthMode.AUTOMATIC} antes de configurar. \\ \hline
+Falta de animação ao posicionar o modelo na cena. & Sim & Uso de \texttt{animate(true).start()} para animar a aparição do modelo. \\ \hline
+Problemas de performance no \texttt{ArSceneView}. & Sim & Configuração do \texttt{FrameRateFactor} para \texttt{FULL}, maximizando o desempenho para dispositivos compatíveis. \\ \hline
+Erro ao clicar em botões de exibição de informações e parar. & Sim & Listeners implementados corretamente para as ações nos botões \texttt{pararVisualizacao} e \texttt{exibirInformacoes}. \\ \hline
+\end{tabular}
+\caption{Tabela de problemas enfrentados e soluções}
+\label{tab:problemas_solucoes}
+\end{table}
+
+
+\end{document}
